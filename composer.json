@@ -1,0 +1,24 @@
+{
+    "name": "lia-tec/caster",
+    "description": "Cast types",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "LiaTec\\Caster\\": "src/",
+            "Tests\\": "test/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Carlos Cruz",
+            "email": "cmpere@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "nesbot/carbon": "^2.57"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
+    }
+}
