@@ -20,6 +20,10 @@ class Cast
         Cast\AsDate::class     => ['date'],
         Cast\AsTrim::class     => ['trim', 'spaces'],
         Cast\AsTruncate::class => ['truncate'],
+        Cast\AsRoundUp::class  => ['roundup'],
+        Cast\AsRound::class    => ['round'],
+        Cast\AsFloor::class    => ['floor'],
+        Cast\AsCeil::class     => ['ceil'],
     ];
 
     /**
