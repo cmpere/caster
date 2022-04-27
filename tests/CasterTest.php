@@ -143,6 +143,42 @@ class CasterTest extends TestCase
         );
     }
 
+    /** @test */
+    public function it_roundup_decimals()
+    {
+        $this->assertEquals(
+            '123.127',
+            Cast::as('123.126666', 'roundup:3')
+        );
+    }
+
+    /** @test */
+    public function it_round_float_values()
+    {
+        $this->assertEquals(
+            '123.127',
+            Cast::as('123.126666', 'round:3')
+        );
+    }
+
+    /** @test */
+    public function it_floor_float_values()
+    {
+        $this->assertEquals(
+            '123',
+            Cast::as('123.126666', 'floor')
+        );
+    }
+
+    /** @test */
+    public function it_ceil_float_values()
+    {
+        $this->assertEquals(
+            '124',
+            Cast::as('123.126666', 'ceil')
+        );
+    }
+
     /**
      * @test
 
