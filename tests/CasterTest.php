@@ -134,6 +134,15 @@ class CasterTest extends TestCase
         $this->assertEquals(159.06, Cast::as('   -159.056     ', 'trim|abs|currency'));
     }
 
+    /** @test */
+    public function it_truncates_string_values()
+    {
+        $this->assertEquals(
+            '123',
+            Cast::as('123456789', 'truncate:3')
+        );
+    }
+
     /**
      * @test
 

@@ -7,6 +7,8 @@ namespace LiaTec\Caster;
  */
 class Cast
 {
+    public const ATTRIBUTE_SEPARATOR = ':';
+
     protected $types = [
         Cast\AsAbsFloat::class => ['abs', 'absolute'],
         Cast\AsBoolean::class  => ['boolean', 'bool'],
@@ -17,6 +19,7 @@ class Cast
         Cast\AsFloat::class    => ['float', 'double'],
         Cast\AsDate::class     => ['date'],
         Cast\AsTrim::class     => ['trim', 'spaces'],
+        Cast\AsTruncate::class => ['truncate'],
     ];
 
     /**
@@ -67,6 +70,16 @@ class Cast
      */
     public function getCaster($type)
     {
+        $attributes = [];
+
+        if (str_contains($type, self::ATTRIBUTE_SEPARATOR)) {
+            $attributes = explode(self::ATTRIBUTE_SEPARATOR, $type);
+
+            if (count($attributes) > 1) {
+                $type = array_shift($attributes);
+            }
+        }
+
         $found = array_filter($this->types, function ($types, $class) use ($type) {
             return in_array($type, $types);
         }, ARRAY_FILTER_USE_BOTH);
@@ -81,6 +94,6 @@ class Cast
             throw new \Exception(sprintf('Class not found for %s caster', $type), 2);
         }
 
-        return new $class();
+        return new $class(...$attributes);
     }
 }
