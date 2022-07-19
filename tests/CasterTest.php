@@ -23,6 +23,15 @@ class CasterTest extends TestCase
         array_map(function ($it) {
             $this->assertEquals('integer', gettype(Cast::as($it, 'int')));
         }, $values);
+
+        $this->assertEquals(
+            '123',
+            Cast::as('123.126666', 'integer')
+        );
+        $this->assertEquals(
+            '3242',
+            Cast::as('3242.126666', 'int')
+        );
     }
 
     /** @test */
@@ -41,6 +50,19 @@ class CasterTest extends TestCase
         array_map(function ($it) {
             $this->assertEquals('double', gettype(Cast::as($it, 'currency')));
         }, $values);
+
+        $this->assertEquals(
+            '123.13',
+            Cast::as('123.126666', 'currency')
+        );
+        $this->assertEquals(
+            '1578.57',
+            Cast::as('1578.56666', 'currency')
+        );
+        $this->assertEquals(
+            '1578.54',
+            Cast::as('1578.544466', 'currency')
+        );
     }
 
     /** @test */
@@ -50,6 +72,11 @@ class CasterTest extends TestCase
         array_map(function ($it) {
             $this->assertEquals('double', gettype(Cast::as($it, 'float')));
         }, $values);
+
+        $this->assertEquals(
+            '123.126666',
+            Cast::as('123.126666', 'float')
+        );
     }
 
     /** @test */
@@ -104,7 +131,7 @@ class CasterTest extends TestCase
     /** @test */
     public function it_cast_boolean()
     {
-        $values = [['1'], 'true', ' true ', 'false', false, true, ['3', 4]];
+        $values = [['1'], 'true', ' true ', 'false', false, true, ['3', 4], 0, '0', ''];
         array_map(function ($it) {
             $this->assertEquals('boolean', gettype(Cast::as($it, 'boolean')));
         }, $values);
@@ -113,9 +140,9 @@ class CasterTest extends TestCase
     /** @test */
     public function it_cast_boolean_values()
     {
-        $truly = [['1'], 'true', ' true ', true, 3, 'content'];
+        $truly = [['1'], 'true', ' true ', true, 3, 'content', ['3', 4]];
 
-        $falsy = [[], 'false', ' false ', false, 0];
+        $falsy = [[], 'false', ' false ', false, 0, '', '0'];
 
         array_map(function ($it) {
             $this->assertEquals('boolean', gettype(Cast::as($it, 'boolean')));
@@ -141,6 +168,23 @@ class CasterTest extends TestCase
             '123',
             Cast::as('123456789', 'truncate:3')
         );
+        $this->assertEquals(
+            '123',
+            Cast::as('   123456789   ', 'trim|truncate:3')
+        );
+    }
+
+    /** @test */
+    public function it_trim_string_values()
+    {
+        $this->assertEquals(
+            '999',
+            Cast::as('     999   ', 'trim')
+        );
+        $this->assertEquals(
+            '999',
+            Cast::as('     999   ', 'spaces')
+        );
     }
 
     /** @test */
@@ -159,6 +203,10 @@ class CasterTest extends TestCase
             '123.127',
             Cast::as('123.126666', 'round:3')
         );
+        $this->assertEquals(
+            '1221.13',
+            Cast::as('1221.129316666', 'round:2')
+        );
     }
 
     /** @test */
@@ -168,6 +216,10 @@ class CasterTest extends TestCase
             '123',
             Cast::as('123.126666', 'floor')
         );
+        $this->assertEquals(
+            '123',
+            Cast::as('123.9999', 'floor')
+        );
     }
 
     /** @test */
@@ -176,6 +228,64 @@ class CasterTest extends TestCase
         $this->assertEquals(
             '124',
             Cast::as('123.126666', 'ceil')
+        );
+    }
+
+    /** @test */
+    public function it_replace_tildes()
+    {
+        $from = 'á,à,ä,â,ª,Á,À,Â,Ä,é,è,ë,ê,É,È,Ê,Ë,í,ì,ï,î,Í,Ì,Ï,Î,ó,ò,ö,ô,Ó,Ò,Ö,Ô,ú,ù,ü,û,Ú,Ù,Û,Ü,ñ,Ñ,ç,Ç';
+        $to   = 'a,a,a,a,a,A,A,A,A,e,e,e,e,E,E,E,E,i,i,i,i,I,I,I,I,o,o,o,o,O,O,O,O,u,u,u,u,U,U,U,U,n,N,c,C';
+        $this->assertEquals(
+            $to,
+            Cast::as($from, 'notilde')
+        );
+    }
+
+    /** @test */
+    public function it_spread_string_on_array()
+    {
+        $str = '1234567890123456789012345678901234567890';
+
+        $this->assertEquals(
+            ['1234567890', '1234567890'],
+            Cast::as($str, 'spread:10,2')
+        );
+
+        $this->assertEquals(
+            ['line1' => '1234567890', 'line2' => '1234567890'],
+            Cast::as($str, 'spread:10,2,line1,line2')
+        );
+
+        $this->assertEquals(
+            ['1234567890', '1234567890', '1234567890', '1234567890'],
+            Cast::as($str, 'spread:10')
+        );
+    }
+
+    /** @test */
+    public function it_spread_words_string_on_array()
+    {
+        $str = 'Lorem ipsum dolor sit amet consectetur, adipisicing elit.';
+
+        $this->assertEquals(
+            ['Lorem', 'ipsum'],
+            Cast::as($str, 'spreadword:4,2')
+        );
+
+        $this->assertEquals(
+            ['line1' => 'Lorem', 'line2' => 'ipsum'],
+            Cast::as($str, 'spreadword:4,2,line1,line2')
+        );
+
+        $this->assertEquals(
+            ['Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur,', 'adipisicing', 'elit.'],
+            Cast::as($str, 'spreadword:4')
+        );
+
+        $this->assertEquals(
+            ['Lorem ipsum', 'dolor sit amet', 'consectetur,', 'adipisicing', 'elit.'],
+            Cast::as($str, 'spreadword:15')
         );
     }
 

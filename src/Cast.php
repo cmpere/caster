@@ -10,20 +10,23 @@ class Cast
     public const ATTRIBUTE_SEPARATOR = ':';
 
     protected $types = [
-        Cast\AsAbsFloat::class => ['abs', 'absolute'],
-        Cast\AsBoolean::class  => ['boolean', 'bool'],
-        Cast\AsCurrency::class => ['currency', 'money'],
-        Cast\AsInteger::class  => ['integer', 'int'],
-        Cast\AsString::class   => ['string', 'str', 'text'],
-        Cast\AsArray::class    => ['array', 'arr'],
-        Cast\AsFloat::class    => ['float', 'double'],
-        Cast\AsDate::class     => ['date'],
-        Cast\AsTrim::class     => ['trim', 'spaces'],
-        Cast\AsTruncate::class => ['truncate'],
-        Cast\AsRoundUp::class  => ['roundup'],
-        Cast\AsRound::class    => ['round'],
-        Cast\AsFloor::class    => ['floor'],
-        Cast\AsCeil::class     => ['ceil'],
+        Cast\AsAbsFloat::class     => ['abs', 'absolute'],
+        Cast\AsBoolean::class      => ['boolean', 'bool'],
+        Cast\AsCurrency::class     => ['currency', 'money'],
+        Cast\AsInteger::class      => ['integer', 'int'],
+        Cast\AsString::class       => ['string', 'str', 'text'],
+        Cast\AsArray::class        => ['array', 'arr'],
+        Cast\AsFloat::class        => ['float', 'double'],
+        Cast\AsDate::class         => ['date'],
+        Cast\AsTrim::class         => ['trim', 'spaces'],
+        Cast\AsTruncate::class     => ['truncate'],
+        Cast\AsRoundUp::class      => ['roundup'],
+        Cast\AsRound::class        => ['round'],
+        Cast\AsFloor::class        => ['floor'],
+        Cast\AsCeil::class         => ['ceil'],
+        Cast\AsNoTilde::class      => ['notilde'],
+        Cast\AsSpreadString::class => ['spread'],
+        Cast\AsSpreadWord::class   => ['spreadword'],
     ];
 
     /**
